@@ -13,13 +13,55 @@ function App() {
   return (
     <div className="">
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route
+          path="/"
+          element={
+            <PublicRoutes>
+              <Login />
+            </PublicRoutes>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PublicRoutes>
+              <Signup />
+            </PublicRoutes>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <PublicRoutes>
+              <ForgotPassword />
+            </PublicRoutes>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoutes>
+              <Settings />
+            </ProtectedRoutes>
+          }
+        />
 
-        <Route path="/home" element={<Home />} />
-        <Route path="/group" element={<Group />} />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoutes>
+              <Home />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/group"
+          element={
+            <ProtectedRoutes>
+              <Group />
+            </ProtectedRoutes>
+          }
+        />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>
