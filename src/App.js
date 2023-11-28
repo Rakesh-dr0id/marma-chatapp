@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
@@ -16,11 +16,10 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/home2" element={<Home2 />} />
-
-        <Route path="/group" element={<Group />} />
         <Route path="/settings" element={<Settings />} />
+
+        <Route path="/home" element={<Home />} />
+        <Route path="/group" element={<Group />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>
@@ -28,3 +27,23 @@ function App() {
 }
 
 export default App;
+
+// Protected Route
+export function ProtectedRoutes({ children }) {
+  const auth = localStorage.getItem('data');
+  if (auth) {
+    return children;
+  } else {
+    return <Navigate to="/" />;
+  }
+}
+
+//Public Route
+export function PublicRoutes({ children }) {
+  const auth = localStorage.getItem('data');
+  if (auth) {
+    return <Navigate to="/home" />;
+  } else {
+    return children;
+  }
+}
