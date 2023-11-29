@@ -1,12 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../assets/Logo.png';
+import Cam from '../assets/camera.png';
+
+import { useForm } from 'react-hook-form';
 
 const Signup = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const submitData = async (data) => {
+    const userData = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      employeeId: data.employeeId,
+      role: data.role,
+      image: selectedFile,
+    };
+    console.log(userData);
+  };
+
+  const changeHandler = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      // Read the selected file and set it to the state
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedFile(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setSelectedFile(null);
+    }
+  };
+
   return (
-    <div>
+    <div className="bg-hero">
       <div className="flex h-screen">
-        <div className="hidden lg:flex items-center justify-center flex-1 bg-white text-black">
+        <div className="hidden lg:flex items-center justify-center flex-1 ">
           <div className="max-w-md text-center">
             <img src={Logo} alt="logo" />
           </div>
@@ -14,11 +51,36 @@ const Signup = () => {
 
         <div className="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center">
           <div className="max-w-md w-full p-6">
-            <h1 className="text-3xl font-semibold mb-6 text-black text-center">
-              Sign Up
+            <h1 className="text-3xl font-semibold mb-1 text-black ">
+              Create your Account
             </h1>
 
-            <form className="space-y-4">
+            {/* Profile picture */}
+            <div className="flex justify-end relative">
+              <label
+                htmlFor="profilePicture"
+                className="cursor-pointer rounded-full border-4 border-gray-500 p-2 h-40 w-40"
+              >
+                {/* Add your icon or text for "Choose File" */}
+                {selectedFile && (
+                  <img
+                    src={selectedFile}
+                    alt="Selected Profile"
+                    className="object-cover h-full w-full rounded-full"
+                  />
+                )}
+                <img src={Cam} alt="" className="absolute bottom-0 right-0" />
+              </label>
+              <input
+                type="file"
+                id="profilePicture"
+                className="hidden"
+                onChange={changeHandler}
+                accept="image/*"
+              />
+            </div>
+
+            <form className="space-y-4" onSubmit={handleSubmit(submitData)}>
               <div>
                 <label
                   htmlFor="name"
@@ -31,7 +93,13 @@ const Signup = () => {
                   id="name"
                   name="name"
                   className="mt-1 p-2 w-full  rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  {...register('name', { required: true, minLength: 6 })}
                 />
+                {errors.name && (
+                  <small className="text-red-500 mt-1">
+                    Name should be of atleast 6 characters
+                  </small>
+                )}
               </div>
               <div>
                 <label
@@ -45,7 +113,16 @@ const Signup = () => {
                   id="email"
                   name="email"
                   className="mt-1 p-2 w-full  rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  {...register('email', {
+                    required: true,
+                    pattern: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                  })}
                 />
+                {errors.email && (
+                  <small className="text-red-500 mt-1">
+                    Please enter valid email
+                  </small>
+                )}
               </div>
 
               <div className="flex items-center justify-between">
@@ -61,7 +138,13 @@ const Signup = () => {
                     id="employeeid"
                     name="employeeid"
                     className="mt-1 p-2 w-full  rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                    {...register('employeeId', { required: true })}
                   />
+                  {errors.employeeId && (
+                    <small className="text-red-500 mt-1">
+                      Please enter an Employee Id
+                    </small>
+                  )}
                 </div>
 
                 <div>
@@ -76,7 +159,13 @@ const Signup = () => {
                     id="role"
                     name="role"
                     className="mt-1 p-2 w-full  rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                    {...register('role', { required: true })}
                   />
+                  {errors.role && (
+                    <small className="text-red-500 mt-1">
+                      Please enter your role
+                    </small>
+                  )}
                 </div>
               </div>
 
@@ -92,7 +181,13 @@ const Signup = () => {
                   id="password"
                   name="password"
                   className="mt-1 p-2 w-full  rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  {...register('password', { required: true, minLength: 6 })}
                 />
+                {errors.password && (
+                  <small className="text-red-500 mt-1">
+                    Please enter min 6 character password
+                  </small>
+                )}
               </div>
               <div>
                 <button
