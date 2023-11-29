@@ -70,7 +70,7 @@ function App() {
 
 export default App;
 
-// Protected Route
+// Protected Routes
 export function ProtectedRoutes({ children }) {
   const auth = localStorage.getItem('data');
   if (auth) {
