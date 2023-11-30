@@ -1,46 +1,63 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import Logo from "../assets/Logo.png";
-import backgroundImage from "../assets/HomePage.jpg";
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import Logo from '../assets/Logo.png';
+import backgroundImage from '../assets/HomePage.jpg';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const containerStyle = {
     backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    height: "100vh",
-    color: "white",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    height: '100vh',
+    color: 'white',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     // Basic email validation
     if (!email || !email.trim()) {
-      setError("Please enter your email.");
+      setError('Please enter your email.');
       return;
     }
 
     // Basic password validation
-    if (!password || password.length < 6) {
-      setError("Please enter a valid password (at least 6 characters).");
+    if (!password || password.length < 3) {
+      setError('Please enter a valid password (at least 6 characters).');
       return;
     }
 
-    // Your authentication logic goes here
-    // For simplicity, I'm just logging the values to the console
-    console.log("Email:", email);
-    console.log("Password:", password);
+    try {
+      const response = await axios.post('/login', {
+        email,
+        password,
+      });
 
-    // Clear any previous errors
-    setError("");
+      const token = response.data.user.token;
+
+      localStorage.setItem('token', token);
+
+      toast.success('Login successful');
+
+      navigate('/home');
+    } catch (error) {
+      console.error(
+        'Login error:',
+        error.response?.data?.message || 'Unknown error'
+      );
+      setError('Login failed. Please check your credentials.');
+    }
   };
 
   return (
@@ -78,7 +95,6 @@ const Login = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   className="mt-1 p-2 w-96 bg-gray-200 text-black   rounded-xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                 />
-                
               </div>
               <div>
                 <label
@@ -101,12 +117,15 @@ const Login = () => {
               </div>
               <div className="flex text-end justify-end">
                 <Link to="/forgot-password">
-                <a href="#" className="text-blue-600  text-sm hover:underline">
-                  Forgot Password?
-                </a>
+                  <a
+                    href="#"
+                    className="text-blue-600  text-sm hover:underline"
+                  >
+                    Forgot Password?
+                  </a>
                 </Link>
               </div>
-             
+
               <div>
                 <button
                   type="submit"
@@ -118,10 +137,13 @@ const Login = () => {
             </form>
             <div className="mt-4 text-sm text-gray-600 text-center ml-8">
               <p>
-                Already have an account?{" "}
-                <Link to="/signup" className="text-black font-extrabold hover:underline">
+                Already have an account?{' '}
+                <Link
+                  to="/signup"
+                  className="text-black font-extrabold hover:underline"
+                >
                   Create account
-                </Link>{" "}
+                </Link>{' '}
               </p>
             </div>
           </div>

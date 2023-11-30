@@ -100,7 +100,7 @@ export default App;
 
 // Protected Route
 export function ProtectedRoutes({ children }) {
-  const auth = localStorage.getItem('data');
+  const auth = localStorage.getItem('token');
   if (auth) {
     return children;
   } else {
@@ -110,7 +110,7 @@ export function ProtectedRoutes({ children }) {
 
 //Public Route
 export function PublicRoutes({ children }) {
-  const auth = localStorage.getItem('data');
+  const auth = localStorage.getItem('token');
   if (auth) {
     return <Navigate to="/home" />;
   } else {

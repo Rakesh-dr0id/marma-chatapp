@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import Chats from '../components/Chats';
 
-const Home2 = () => {
+const Home = () => {
+  const [headerData, setHeaderData] = useState([]);
   return (
     <div>
       {/* <!-- This is an example component --> */}
-      <div className=" h-full m-2 mx-auto shadow-lg rounded-lg">
+      <div className=" h-screen m-2 mx-auto shadow-lg rounded-lg">
         {/* <!-- header --> */}
-        <Header />
+        <Header onHeaderDataChange={setHeaderData} />
         {/* <!-- end header --> */}
 
         {/* <!-- Chatting --> */}
@@ -17,7 +18,7 @@ const Home2 = () => {
           {/* <!-- chat list --> */}
           <div className="flex flex-col w-2/5 border-r-2 overflow-y-auto">
             {/* <!-- user list --> */}
-            <Sidebar />
+            <Sidebar headerData={headerData} />
             {/* <!-- end user list --> */}
           </div>
           {/* <!-- end chat list --> */}
@@ -29,4 +30,4 @@ const Home2 = () => {
   );
 };
 
-export default Home2;
+export default Home;

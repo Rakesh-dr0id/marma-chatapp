@@ -4,7 +4,7 @@ const Contact = (props) => {
   let { name, email, image } = props.data;
   return (
     <div>
-      <div className="flex flex-row py-4 px-2 justify-center items-center border-b-2">
+      <div className="flex flex-row py-4 px-2 justify-center items-center border-b-2 hover:bg-blue-400">
         <div className="w-1/4">
           <img
             src={image}
