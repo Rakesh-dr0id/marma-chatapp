@@ -7,6 +7,8 @@ import Home from './pages/Home';
 import Group from './pages/Group';
 import Settings from './pages/Settings';
 import PageNotFound from './pages/PageNotFound';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import io from 'socket.io-client';
 
@@ -78,6 +80,18 @@ function App() {
         />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </div>
   );
 }
