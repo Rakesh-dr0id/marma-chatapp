@@ -57,9 +57,6 @@ const Signup = () => {
       // reader.readAsDataURL(file);
       // console.log(file);
       setSelectedFile(file);
-
-      // const formData = new FormData();
-      // formData.append('avatar', file);
     } else {
       setSelectedFile(null);
     }
