@@ -1,31 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/Logo.png";
 import backgroundImage from "../assets/HomePage.jpg";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
   const containerStyle = {
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
-    height: "100vh", 
-    color: "white", 
+    height: "100vh",
+    color: "white",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
   };
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    // Basic email validation
+    if (!email || !email.trim()) {
+      setError("Please enter your email.");
+      return;
+    }
+
+    // Basic password validation
+    if (!password || password.length < 6) {
+      setError("Please enter a valid password (at least 6 characters).");
+      return;
+    }
+
+    // Your authentication logic goes here
+    // For simplicity, I'm just logging the values to the console
+    console.log("Email:", email);
+    console.log("Password:", password);
+
+    // Clear any previous errors
+    setError("");
+  };
+
   return (
     <div style={containerStyle}>
-       <div className="max-w-md text-center ">
-            <img src={Logo} alt="logo" className="" />
-          </div>
+      <div className="max-w-md text-center ">
+        <img src={Logo} alt="logo" className="" />
+      </div>
       <div className="flex h-screen">
         <div className=" lg:flex items-center justify-center flex-1 bg-white text-black">
-          
           <div className="border-l border-solid ml-28 border-gray-300/90  h-full mx-4"></div>
         </div>
-        
-        <div className="w-full  xl:w-1/2 flex items-center justify-center">
+        <div className="w-full   flex items-center justify-center">
           <div className="max-w-md w-full p-6">
             <h1 className="text-3xl font-extrabold mb-6 text-black text-center">
               Welcome Back?
@@ -34,26 +61,29 @@ const Login = () => {
               </h1>
             </h1>
 
-            <form className="space-y-4 ml-10">
-            <div>
+            <form className="space-y-4 ml-10" onSubmit={handleLogin}>
+              <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm  text-black font-extrabold"
                 >
                   Email
                 </label>
                 <input
                   type="text"
                   id="email"
-                  placeholder='Enter Your Email'
+                  placeholder="Enter Your Email"
                   name="email"
-                  className="mt-1 p-2 w-96 bg-gray-200 text-black   rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="mt-1 p-2 w-96 bg-gray-200 text-black   rounded-xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                 />
+                
               </div>
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm text-black font-extrabold"
                 >
                   Password
                 </label>
@@ -61,16 +91,23 @@ const Login = () => {
                   type="password"
                   id="password"
                   name="password"
-                  placeholder='Create Your Password'
-                  className="mt-1 p-2 w-96 bg-gray-200  rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  placeholder="Create Your Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="mt-1 p-2 w-96 bg-gray-200 text-black  rounded-xl
+                   focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                 />
+                {error && <p className="text-red-500">{error}</p>}
               </div>
               <div className="flex text-end justify-end">
-
-<a href="#" className="text-blue-600  text-sm hover:underline">Forgot Password?</a>
-</div>
+                <Link to="/forgot-password">
+                <a href="#" className="text-blue-600  text-sm hover:underline">
+                  Forgot Password?
+                </a>
+                </Link>
+              </div>
+             
               <div>
-                
                 <button
                   type="submit"
                   className=" w-[200px] ml-[25%] bg-gradient-to-r from-gray-900 to-gray-400/90 text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
@@ -82,12 +119,9 @@ const Login = () => {
             <div className="mt-4 text-sm text-gray-600 text-center ml-8">
               <p>
                 Already have an account?{" "}
-                <a
-                  href="#"
-                  className="text-black font-extrabold hover:underline"
-                >
+                <Link to="/signup" className="text-black font-extrabold hover:underline">
                   Create account
-                </a>{" "}
+                </Link>{" "}
               </p>
             </div>
           </div>
