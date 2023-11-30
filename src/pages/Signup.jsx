@@ -1,28 +1,76 @@
-
-
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../assets/Logo.png';
-import backgroundImage from "../assets/HomePage.jpg"
+import Cam from '../assets/camera.png';
 
+import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const [selectedFile, setSelectedFile] = useState(null);
 
-  const containerStyle = {
-    backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    height: '100vh', 
-    color: 'white', 
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+  const submitData = async (data) => {
+    const formData = new FormData();
+
+    formData.append('name', data.name);
+    formData.append('email', data.email);
+    formData.append('password', data.password);
+    formData.append('employeeId', data.employeeId);
+    formData.append('role', data.role);
+
+    if (selectedFile) {
+      formData.append('image', selectedFile);
+    }
+
+    try {
+      const response = await axios.post('/createUser', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log(response.data);
+      toast.success('Account created Successfully, Please Login');
+      navigate('/');
+    } catch (error) {
+      toast.error('Error creating user:', error);
+    }
   };
+
+  const changeHandler = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      // Read the selected file and set it to the state
+      // const reader = new FileReader();
+      // reader.onloadend = () => {
+      //   setSelectedFile(reader.result);
+      // };
+      // reader.readAsDataURL(file);
+      // console.log(file);
+      setSelectedFile(file);
+
+      // const formData = new FormData();
+      // formData.append('avatar', file);
+    } else {
+      setSelectedFile(null);
+    }
+  };
+
   return (
-      <div style={containerStyle} >
-        <div className="max-w-md text-center ">
-            <img src={Logo} alt="logo" className="" />
+    <div className="bg-hero">
+      <div className="flex h-screen">
+        <div className="hidden lg:flex items-center justify-center flex-1 ">
+          <div className="max-w-md text-center">
+            <img src={Logo} alt="logo" />
           </div>
         <div className="flex h-screen">
         <div className=" lg:flex items-center justify-center flex-1 bg-white text-black">
@@ -30,18 +78,40 @@ const Signup = () => {
           <div className="border-l border-solid border-gray-300/90 ml-28  h-full mx-4"></div>
         </div>
 
-        <div className="w-full    flex items-center justify-start">
-          <div className=" w-full p-6">
-          <h1 className="text-3xl font-extrabold mb-20 text-black text-center ">
-              Create Your Account
-               <h1 className="text-base text-gray-800 font-serif font-extralight mb-10 ml-[18%] text-start">
-               Connect with Marma Fintec
-              </h1>
+        <div className="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center">
+          <div className="max-w-md w-full p-6">
+            <h1 className="text-3xl font-semibold mb-1 text-black ">
+              Create your Account
             </h1>
 
-          <form className="space-y-4 text-start ml-20">
-               <div>
-                 <label
+            {/* Profile picture */}
+            <div className="flex justify-end relative">
+              <label
+                htmlFor="profilePicture"
+                className="cursor-pointer rounded-full border-4 border-gray-500 p-2 h-40 w-40"
+              >
+                {/* Add your icon or text for "Choose File" */}
+                {selectedFile && (
+                  <img
+                    src={URL.createObjectURL(selectedFile)}
+                    alt="Selected Profile"
+                    className="object-cover h-full w-full rounded-full"
+                  />
+                )}
+                <img src={Cam} alt="" className="absolute bottom-0 right-0" />
+              </label>
+              <input
+                type="file"
+                id="profilePicture"
+                className="hidden"
+                onChange={changeHandler}
+                accept="image/*"
+              />
+            </div>
+
+            <form className="space-y-4" onSubmit={handleSubmit(submitData)}>
+              <div>
+                <label
                   htmlFor="name"
                   className="block text-black font-extrabold text-sm"
                 >
@@ -52,8 +122,14 @@ const Signup = () => {
                   id="name"
                   placeholder='Enter Your Name'
                   name="name"
-                  className="mt-1  p-2 w-full text-black bg-gray-200  rounded-xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  className="mt-1 p-2 w-full  rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  {...register('name', { required: true, minLength: 6 })}
                 />
+                {errors.name && (
+                  <small className="text-red-500 mt-1">
+                    Name should be of atleast 6 characters
+                  </small>
+                )}
               </div>
               <div>
                 <label
@@ -67,8 +143,17 @@ const Signup = () => {
                   id="email"
                   placeholder='Enter Your Email'
                   name="email"
-                  className="mt-1 p-2  w-full text-black bg-gray-200  rounded-xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  className="mt-1 p-2 w-full  rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  {...register('email', {
+                    required: true,
+                    pattern: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                  })}
                 />
+                {errors.email && (
+                  <small className="text-red-500 mt-1">
+                    Please enter valid email
+                  </small>
+                )}
               </div>
 
               <div className="flex items-center justify-between">
@@ -84,8 +169,14 @@ const Signup = () => {
                     id="employeeid"
                     placeholder='Enter Your Emp id'
                     name="employeeid"
-                    className="mt-1  p-2 text-black w-full bg-gray-200  rounded-xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                    className="mt-1 p-2 w-full  rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                    {...register('employeeId', { required: true })}
                   />
+                  {errors.employeeId && (
+                    <small className="text-red-500 mt-1">
+                      Please enter an Employee Id
+                    </small>
+                  )}
                 </div>
 
                 <div>
@@ -100,8 +191,14 @@ const Signup = () => {
                     id="role"
                     placeholder='Enter Your Role'
                     name="role"
-                    className="mt-1 ml-2  p-2 text-black w-full bg-gray-200  rounded-xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                    className="mt-1 p-2 w-full  rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                    {...register('role', { required: true })}
                   />
+                  {errors.role && (
+                    <small className="text-red-500 mt-1">
+                      Please enter your role
+                    </small>
+                  )}
                 </div>
               </div>
 
@@ -116,9 +213,14 @@ const Signup = () => {
                   type="password"
                   id="password"
                   name="password"
-                  placeholder='Create Your Password'
-                  className="mt-1 text-black  p-2 w-full bg-gray-200  rounded-xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  className="mt-1 p-2 w-full  rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  {...register('password', { required: true, minLength: 6 })}
                 />
+                {errors.password && (
+                  <small className="text-red-500 mt-1">
+                    Please enter min 6 character password
+                  </small>
+                )}
               </div>
               <div>
                 <button

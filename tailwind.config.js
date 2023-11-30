@@ -2,7 +2,11 @@
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}', './node_modules/flowbite/**/*.js'],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        hero: "url('/src/assets/bg.jpg')",
+      },
+    },
   },
   plugins: [require('flowbite/plugin')],
 };

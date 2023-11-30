@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -7,9 +7,25 @@ import Home from './pages/Home';
 import Group from './pages/Group';
 import Settings from './pages/Settings';
 import PageNotFound from './pages/PageNotFound';
-import Home2 from './pages/Home2';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import io from 'socket.io-client';
+
+const socket = io.connect('http://localhost:8000');
 
 function App() {
+  //Socket wirings
+  const sendMessage = () => {
+    socket.emit('send_message', { message: 'Hello' });
+  };
+
+  useEffect(() => {
+    socket.on('receive_message', (data) => {
+      alert(data.message);
+    });
+  }, []);
+
   return (
     <div className="">
       <Routes>
@@ -64,13 +80,25 @@ function App() {
         />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </div>
   );
 }
 
 export default App;
 
-// Protected Routes
+// Protected Route
 export function ProtectedRoutes({ children }) {
   const auth = localStorage.getItem('data');
   if (auth) {
