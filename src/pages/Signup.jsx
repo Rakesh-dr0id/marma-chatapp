@@ -4,8 +4,12 @@ import Logo from '../assets/Logo.png';
 import Cam from '../assets/camera.png';
 
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -14,15 +18,31 @@ const Signup = () => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const submitData = async (data) => {
-    const userData = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-      employeeId: data.employeeId,
-      role: data.role,
-      image: selectedFile,
-    };
-    console.log(userData);
+    const formData = new FormData();
+
+    formData.append('name', data.name);
+    formData.append('email', data.email);
+    formData.append('password', data.password);
+    formData.append('employeeId', data.employeeId);
+    formData.append('role', data.role);
+
+    if (selectedFile) {
+      formData.append('image', selectedFile);
+    }
+
+    try {
+      const response = await axios.post('/createUser', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log(response.data);
+      toast.success('Account created Successfully, Please Login');
+      navigate('/');
+    } catch (error) {
+      toast.error('Error creating user:', error);
+    }
   };
 
   const changeHandler = (e) => {
@@ -30,11 +50,16 @@ const Signup = () => {
 
     if (file) {
       // Read the selected file and set it to the state
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedFile(reader.result);
-      };
-      reader.readAsDataURL(file);
+      // const reader = new FileReader();
+      // reader.onloadend = () => {
+      //   setSelectedFile(reader.result);
+      // };
+      // reader.readAsDataURL(file);
+      // console.log(file);
+      setSelectedFile(file);
+
+      // const formData = new FormData();
+      // formData.append('avatar', file);
     } else {
       setSelectedFile(null);
     }
@@ -64,7 +89,7 @@ const Signup = () => {
                 {/* Add your icon or text for "Choose File" */}
                 {selectedFile && (
                   <img
-                    src={selectedFile}
+                    src={URL.createObjectURL(selectedFile)}
                     alt="Selected Profile"
                     className="object-cover h-full w-full rounded-full"
                   />
