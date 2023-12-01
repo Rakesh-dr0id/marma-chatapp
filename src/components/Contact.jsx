@@ -1,10 +1,31 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect } from 'react';
+
+const token = localStorage.getItem('token');
 
 const Contact = (props) => {
-  let { name, email, image } = props.data;
+  let { name, email, image, _id } = props.data;
+
+  // useEffect(() => {}, []);
+  const handleChatId = async () => {
+    await axios.post(
+      `/accessChat`,
+
+      { userId: _id },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  };
+
   return (
     <div>
-      <div className="flex flex-row py-4 px-2 justify-center items-center border-b-2 hover:bg-blue-400">
+      <div
+        className="flex flex-row py-4 px-2 justify-center items-center border-b-2 hover:bg-blue-400 "
+        onClick={handleChatId}
+      >
         <div className="w-1/4">
           <img
             src={image}
