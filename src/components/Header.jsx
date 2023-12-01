@@ -3,14 +3,13 @@ import { Link } from 'react-router-dom';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import Logo from '../assets/Logo.png';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const token = localStorage.getItem('token');
 
 const Header = ({ onHeaderDataChange }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -39,14 +38,34 @@ const Header = ({ onHeaderDataChange }) => {
     if (searchQuery || token) {
       fetchData();
     }
-  }, [searchQuery, token]);
+  }, [searchQuery, token, onHeaderDataChange]);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
 
+  //JWT Decode function
+  // const decodeJWT = (token) => {
+  //   try {
+  //     // The second parameter is the secret key used to sign the token
+  //     const decoded = jwt.verify(token, 'your-secret-key');
+  //     return decoded;
+  //   } catch (error) {
+  //     console.error('Error decoding JWT:', error.message);
+  //     return null;
+  //   }
+  // };
+
+  // const decodedToken = decodeJWT(token);
+
+  //   // Now you can use the decoded information as needed
+  //   if (decodedToken) {
+  //     console.log('Decoded JWT:', decodedToken);
+  //   }
+
   const logoutHandler = () => {
     localStorage.clear();
+    toast.success('Logout successful');
   };
 
   return (

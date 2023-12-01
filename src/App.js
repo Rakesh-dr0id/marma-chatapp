@@ -12,19 +12,36 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import io from 'socket.io-client';
 
-const socket = io.connect('http://localhost:8000');
-
+// const socket = io.connect('http://localhost:8000');
 function App() {
-  //Socket wirings
-  const sendMessage = () => {
-    socket.emit('send_message', { message: 'Hello' });
-  };
 
-  useEffect(() => {
-    socket.on('receive_message', (data) => {
-      alert(data.message);
-    });
-  }, []);
+
+useEffect(() => {
+  // Replace 'http://localhost:8000' with your server URL if different
+  const socket = io('http://localhost:8000');
+
+  // Setup event
+  socket.on('connect', () => {
+    const userData = { _id: '123' }; // Replace with actual user data
+    socket.emit('setup', userData);
+  });
+
+  // Listen for 'connected' event
+  socket.on('connected', () => {
+    console.log('Connected to socket.io');
+  });
+
+  // Listen for 'message received' event
+  socket.on('message recieved', (newMessage) => {
+    console.log('New message received:', newMessage);
+  });
+
+  // Cleanup on unmount
+  return () => {
+    socket.off('setup');
+    socket.disconnect();
+  };
+}, []);
 
   return (
     <div className="">

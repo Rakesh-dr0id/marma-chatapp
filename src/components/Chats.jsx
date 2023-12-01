@@ -1,6 +1,19 @@
-import React from 'react';
+import React,{useEffect, useState} from 'react';
+import {  io } from 'socket.io-client';
 
-const Chats = () => {
+const EndPoint = 'http://localhost:8000';
+let socket, selectedChatCompare;
+
+const Chats = ({currentUser}) => {
+  const [socketConnected, setSocketConnected] = useState(false);
+  const {id, name, image, role, employeeId, password} = currentUser;
+  useEffect(() => {
+    socket = io(EndPoint)
+    // socket.emit('setup', user);
+    socket.on('connection', () => setSocketConnected(true))
+    
+  }, [])
+  
   return (
     <div>
       <div className="w-full px-5 flex flex-col justify-between ">
@@ -10,7 +23,7 @@ const Chats = () => {
               Welcome to group everyone !
             </div>
             <img
-              src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
+              src={image}
               className="object-cover h-8 w-8 rounded-full"
               alt=""
             />
@@ -28,7 +41,7 @@ const Chats = () => {
               consequatur quas?
             </div>
           </div>
-          <div className="flex justify-end mb-4">
+          {/* <div className="flex justify-end mb-4">
             <div>
               <div className="mr-2 py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white">
                 Lorem ipsum dolor, sit amet consectetur adipisicing elit.
@@ -55,7 +68,7 @@ const Chats = () => {
             <div className="ml-2 py-3 px-4 bg-gray-400 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-white">
               happy holiday guys!
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="py-5 fixed bottom-0 w-[80%] lg:w-[70%]">
           <input

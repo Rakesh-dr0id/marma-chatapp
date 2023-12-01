@@ -1,10 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import Chats from '../components/Chats';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+
+
+const token = localStorage.getItem('token');
+
 
 const Home = () => {
   const [headerData, setHeaderData] = useState([]);
+  const [currentUser, setCurrentUser] = useState('')
+  
+
+ 
+
+  useEffect(() => {
+    const getCurrentUser = async() => {
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        // console.log(decodedToken.id); // Logs the decoded payload to the console
+      
+      await axios.get(`/getUserProfile/${decodedToken.id}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then(res => setCurrentUser(res.data))
+    }}
+
+    getCurrentUser();
+    
+  }, [])
+  
   return (
     <div>
       {/* <!-- This is an example component --> */}
@@ -22,7 +50,7 @@ const Home = () => {
             {/* <!-- end user list --> */}
           </div>
           {/* <!-- end chat list --> */}
-          <Chats />
+          <Chats currentUser={currentUser}/>
           {/* <!-- message --> */}
         </div>
       </div>
