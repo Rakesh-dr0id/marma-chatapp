@@ -4,6 +4,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import Logo from '../assets/Logo.png';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import GroupChatModal from './GroupChatModal';
 
 const token = localStorage.getItem('token');
 
@@ -50,6 +51,11 @@ const Header = ({ onHeaderDataChange }) => {
     setIsModalOpen(true);
   };
 
+  const handleCloseModal = (e) => {
+    e.preventDefault();
+    setIsModalOpen(false);
+  };
+
   //JWT Decode function
   // const decodeJWT = (token) => {
   //   try {
@@ -88,25 +94,6 @@ const Header = ({ onHeaderDataChange }) => {
               className="rounded-2xl bg-gray-100 py-3 px-5 w-full ring-0 border-none"
               onChange={handleSearch}
             />
-            {/* <div
-              className="grid place-items-center h-full w-12 text-gray-300"
-              onClick={handleSearch}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </div> */}
           </div>
           <button
             className="h-12 w-12 p-2 bg-gray-500 rounded-full text-white font-semibold flex items-center justify-center"
@@ -115,15 +102,17 @@ const Header = ({ onHeaderDataChange }) => {
             <BsThreeDotsVertical />
           </button>
           {isOpen && (
-            <div className="origin-top-right absolute right-0 mt-5 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <div className="origin-top-right absolute right-0 mt-5 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hover:cursor-pointer">
               {/* Your dropdown content goes here */}
               <div className="py-1">
-                <Link
-                  onClick={handleOpenModal}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Create Group
-                </Link>
+                <GroupChatModal>
+                  <div
+                    onClick={handleOpenModal}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Create Group
+                  </div>
+                </GroupChatModal>
                 <Link
                   to="/settings"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
