@@ -44,13 +44,15 @@ const Home = () => {
         {/* <!-- Chatting --> */}
         <div className="flex flex-row justify-between bg-white h-full">
           {/* <!-- chat list --> */}
-          <div className="flex flex-col w-2/5 border-r-2 overflow-y-auto">
+          <div className="flex flex-col w-1/5 border-r-2 overflow-y-auto">
             {/* <!-- user list --> */}
             <Sidebar headerData={headerData} />
             {/* <!-- end user list --> */}
           </div>
           {/* <!-- end chat list --> */}
-          <Chats currentUser={currentUser}/>
+          <div className='w-4/5'>
+            <Chats currentUser={currentUser} selectedUser = {headerData}/>
+          </div>
           {/* <!-- message --> */}
         </div>
       </div>

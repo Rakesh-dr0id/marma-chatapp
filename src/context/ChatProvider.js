@@ -31,6 +31,8 @@ const ChatProvider = ({ children }) => {
     currentUser()
   }, []);
 
+  
+
   return (
     <ChatContext.Provider
       value={{

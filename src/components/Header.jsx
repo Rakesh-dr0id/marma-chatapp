@@ -10,6 +10,7 @@ const token = localStorage.getItem('token');
 const Header = ({ onHeaderDataChange }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -42,6 +43,11 @@ const Header = ({ onHeaderDataChange }) => {
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  const handleOpenModal = (e) => {
+    e.preventDefault();
+    setIsModalOpen(true);
   };
 
   //JWT Decode function
@@ -113,7 +119,7 @@ const Header = ({ onHeaderDataChange }) => {
               {/* Your dropdown content goes here */}
               <div className="py-1">
                 <Link
-                  to="/group"
+                  onClick={handleOpenModal}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   Create Group
