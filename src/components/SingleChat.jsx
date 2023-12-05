@@ -8,7 +8,7 @@ const SingleChat = ({messages}) => {
   return (
     <div>
     {messages && messages.map((m,i) => (
-    m && <div>
+    m && <div key={i}>
       <div className="flex flex-col mt-5">
           {m.sender._id === user.id && m.content && 
           <div className="flex justify-end mb-4">

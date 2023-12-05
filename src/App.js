@@ -16,32 +16,32 @@ import io from 'socket.io-client';
 function App() {
 
 
-useEffect(() => {
-  // Replace 'http://localhost:8000' with your server URL if different
-  const socket = io('http://localhost:8000');
+// useEffect(() => {
+//   // Replace 'http://localhost:8000' with your server URL if different
+//   const socket = io('http://localhost:8000');
 
-  // Setup event
-  socket.on('connect', () => {
-    const userData = { _id: '123' }; // Replace with actual user data
-    socket.emit('setup', userData);
-  });
+//   // Setup event
+//   socket.on('connect', () => {
+//     const userData = { _id: '123' }; // Replace with actual user data
+//     socket.emit('setup', userData);
+//   });
 
-  // Listen for 'connected' event
-  socket.on('connected', () => {
-    console.log('Connected to socket.io');
-  });
+//   // Listen for 'connected' event
+//   socket.on('connected', () => {
+//     console.log('Connected to socket.io');
+//   });
 
-  // Listen for 'message received' event
-  socket.on('message recieved', (newMessage) => {
-    console.log('New message received:', newMessage);
-  });
+//   // Listen for 'message received' event
+//   socket.on('message recieved', (newMessage) => {
+//     console.log('New message received:', newMessage);
+//   });
 
-  // Cleanup on unmount
-  return () => {
-    socket.off('setup');
-    socket.disconnect();
-  };
-}, []);
+//   // Cleanup on unmount
+//   return () => {
+//     socket.off('setup');
+//     socket.disconnect();
+//   };
+// }, []);
 
   return (
     <div className="">
