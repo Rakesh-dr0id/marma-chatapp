@@ -6,8 +6,8 @@ import { ChatState } from '../context/ChatProvider';
 import { toast } from 'react-toastify';
 import SingleChat from './SingleChat';
 
-// const ENDPOINT = 'https://marmachatapp-yef1.onrender.com';
-const ENDPOINT = 'http://localhost:8000';
+const ENDPOINT = 'https://marmachatapp-yef1.onrender.com';
+// const ENDPOINT = 'http://localhost:8000';
 let selectedChatCompare;
 
 const token = localStorage.getItem('token');
