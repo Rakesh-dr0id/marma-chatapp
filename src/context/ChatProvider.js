@@ -24,7 +24,7 @@ const ChatProvider = ({ children }) => {
         });
 
         setUser(response.data);
-        console.log('User:', response.data);
+        // console.log('User:', response.data);
       } catch (error) {
         console.error('Error fetching user profile:', error);
       }
@@ -34,7 +34,7 @@ const ChatProvider = ({ children }) => {
   }, [token]);
 
   useEffect(() => {
-    console.log('Updated User:', user);
+    // console.log('Updated User:', user);
   }, [user]);
 
   return (
