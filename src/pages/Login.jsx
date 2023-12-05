@@ -5,6 +5,7 @@ import backgroundImage from '../assets/HomePage.jpg';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import BaseURL from '../BaseURL';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -39,7 +40,7 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post('/login', {
+      const response = await axios.post(`${BaseURL}/login`, {
         email,
         password,
       });

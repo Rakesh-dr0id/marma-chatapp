@@ -7,9 +7,11 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import BaseURL from '../BaseURL';
 
 const Signup = () => {
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -75,7 +77,7 @@ const Signup = () => {
       image: selectedFile,
     };
     try {
-      const response = await axios.post('/createUser', userData);
+      const response = await axios.post(`${BaseURL}/createUser`, userData);
 
       console.log(response.data);
       toast.success('Account created Successfully, Please Login');

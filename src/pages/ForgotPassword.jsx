@@ -4,6 +4,7 @@ import Logo from '../assets/Logo.png';
 import backgroundImage from '../assets/HomePage.jpg';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import BaseURL from '../BaseURL';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -23,7 +24,7 @@ const ForgotPassword = () => {
     e.preventDefault();
     try {
       axios
-        .post('/forgetPwd', {
+        .post(`${BaseURL}/forgetPwd`, {
           email: email,
         })
         .then((res) => console.log(res.data));

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import BaseURL from '../BaseURL';
 
 const ChatContext = createContext();
 
@@ -17,11 +18,14 @@ const ChatProvider = ({ children }) => {
       try {
         const decodedToken = jwtDecode(token);
 
-        const response = await axios.get(`/getUserProfile/${decodedToken.id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${BaseURL}/getUserProfile/${decodedToken.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         setUser(response.data);
         // console.log('User:', response.data);

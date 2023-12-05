@@ -5,6 +5,7 @@ import axios from 'axios';
 import { ChatState } from '../context/ChatProvider';
 import { toast } from 'react-toastify';
 import SingleChat from './SingleChat';
+import BaseURL from '../BaseURL';
 
 const ENDPOINT = 'https://marmachatapp-yef1.onrender.com';
 // const ENDPOINT = 'http://localhost:8000';
@@ -54,11 +55,14 @@ const Chats = ({ currentUser, selectedUser }) => {
   //Get All messages
   const getMessages = async () => {
     try {
-      const { data } = await axios.get(`/getMessages/${selectedChat._id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await axios.get(
+        `${BaseURL}/getMessages/${selectedChat._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log('API response', data);
 
       setMessages(data);
@@ -80,7 +84,7 @@ const Chats = ({ currentUser, selectedUser }) => {
   const handleSendMessage = async () => {
     try {
       const { data } = await axios.post(
-        `/sendMsg`,
+        `${BaseURL}/sendMsg`,
         {
           content: newMessage,
           chatId: selectedChat._id,

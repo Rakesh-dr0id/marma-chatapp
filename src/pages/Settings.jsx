@@ -1,24 +1,22 @@
-import backgroundImage from "../assets/HomePage.jpg";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import Cam from "../assets/camera.png";
-import axios from "axios";
-import { ChatState } from "../context/ChatProvider";
+import backgroundImage from '../assets/HomePage.jpg';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Cam from '../assets/camera.png';
+import axios from 'axios';
+import { ChatState } from '../context/ChatProvider';
+import BaseURL from '../BaseURL';
 
 const Settings = () => {
   const [showPasswordFields, setShowPasswordFields] = useState(false);
-  const [newPassword, setNewPassword] = useState("");
-  const [employeeId, setEmployeeId] = useState("");
-  const [role, setRole] = useState("");
-  const [name, setName] = useState(""); 
+  const [newPassword, setNewPassword] = useState('');
+  const [employeeId, setEmployeeId] = useState('');
+  const [role, setRole] = useState('');
+  const [name, setName] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
-  
-
-
 
   const { user } = ChatState();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   const navigate = useNavigate();
 
   const submitData = async (e) => {
@@ -29,21 +27,24 @@ const Settings = () => {
       role,
       password: newPassword,
       name,
-      
     };
 
     try {
-      const response = await axios.put(`/editUser/${user.id}`, userData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.put(
+        `${BaseURL}/editUser/${user.id}`,
+        userData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       console.log(response.data);
 
       if (response.status === 200) {
-        toast.success("Updated Successfully");
-        navigate("/home");
+        toast.success('Updated Successfully');
+        navigate('/home');
       } else {
         toast.error(
           `Failed to update user. Server responded with status ${response.status}`
@@ -80,13 +81,13 @@ const Settings = () => {
 
   const containerStyle = {
     backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    height: "100vh",
-    color: "white",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    height: '100vh',
+    color: 'white',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   };
 
   const handleProfileImageChange = (event) => {
@@ -94,22 +95,20 @@ const Settings = () => {
   };
 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
 
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = 'auto';
     };
   }, []);
 
   useEffect(() => {
-    setEmployeeId(user?.employeeId || "");
-    setRole(user?.role || "");
-    setName(user?.name || ""); // Set name state
-    setNewPassword("");
+    setEmployeeId(user?.employeeId || '');
+    setRole(user?.role || '');
+    setName(user?.name || ''); // Set name state
+    setNewPassword('');
     setSelectedFile(user?.image || null);
-    
-    
-  }, [user, ]);
+  }, [user]);
 
   return (
     <>
@@ -118,19 +117,19 @@ const Settings = () => {
           className="bg-gray-400 text-black font-bold p-2 rounded flex items-center cursor-pointer"
           onClick={goBack}
         >
-          <span className="mr-2" dangerouslySetInnerHTML={{ __html: "&lt;" }} />
+          <span className="mr-2" dangerouslySetInnerHTML={{ __html: '&lt;' }} />
           <h1>Settings</h1>
         </div>
         <div style={containerStyle}>
           <div className="max-w-md text-center  ">
             <div className="flex justify-end relative">
-            <label
+              <label
                 htmlFor="profilePicture"
                 className="cursor-pointer rounded-full border-4 border-gray-500 p-2 h-40 w-40"
               >
                 {/* Add your icon or text for "Choose File" */}
                 {selectedFile && (
-                  <img 
+                  <img
                     src={selectedFile}
                     alt="Selected Profile"
                     className="object-cover h-full w-full rounded-full"

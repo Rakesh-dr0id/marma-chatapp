@@ -5,6 +5,7 @@ import Logo from '../assets/Logo.png';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import GroupChatModal from './GroupChatModal';
+import BaseURL from '../BaseURL';
 
 const token = localStorage.getItem('token');
 
@@ -22,7 +23,7 @@ const Header = ({ onHeaderDataChange }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `/getAllUsers?search=${encodeURIComponent(searchQuery)}`,
+          `${BaseURL}/getAllUsers?search=${encodeURIComponent(searchQuery)}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -105,15 +106,14 @@ const Header = ({ onHeaderDataChange }) => {
             <div className="origin-top-right absolute right-0 mt-5 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hover:cursor-pointer">
               {/* Your dropdown content goes here */}
               <div className="py-1">
-                
-                  <Link
-                    // onClick={handleOpenModal}
-                    to='/group'
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Create Group
-                  </Link>
-                
+                <Link
+                  // onClick={handleOpenModal}
+                  to="/group"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  Create Group
+                </Link>
+
                 <Link
                   to="/settings"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
