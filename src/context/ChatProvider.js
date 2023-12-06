@@ -12,6 +12,8 @@ const ChatProvider = ({ children }) => {
   const [user, setUser] = useState('');
   const [notification, setNotification] = useState([]);
   const [chats, setChats] = useState();
+  const [selectedContacts, setSelectedContacts] = useState([]);
+
 
   useEffect(() => {
     const currentUser = async () => {
@@ -52,6 +54,8 @@ const ChatProvider = ({ children }) => {
         setNotification,
         chats,
         setChats,
+        selectedContacts,
+        setSelectedContacts
       }}
     >
       {children}

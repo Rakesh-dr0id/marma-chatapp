@@ -49,8 +49,12 @@ const Chats = ({ currentUser, selectedUser }) => {
   // }, 5000);
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+    getMessages()
   }, [messages]);
+
+  // useEffect(() => {
+  //   scrollRef.current?.scrollIntoView({ behavior: 'smooth' }); 
+  // }, [messages]);
 
   //Get All messages
   const getMessages = async () => {
