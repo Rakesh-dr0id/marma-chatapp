@@ -48,9 +48,10 @@ const Chats = ({ currentUser, selectedUser }) => {
   //   console.log('Get messages');
   // }, 5000);
 
-  useEffect(() => {
-    getMessages();
-  }, [messages]);
+  //! Imp
+  // useEffect(() => {
+  //   getMessages();
+  // }, [messages]);
 
   // useEffect(() => {
   //   scrollRef.current?.scrollIntoView({ behavior: 'smooth' });

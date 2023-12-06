@@ -12,11 +12,12 @@ const ContactGroup = (props) => {
 
   // useEffect(() => {}, []);
   const handleChatId = async () => {
+    console.log('HI');
     console.log('Request Payload:', { userId: _id });
     const { data } = await axios.post(
       `${BaseURL}/accessGroupChat`,
 
-      { userId: _id },
+      { groupId: '657064ea05a8f2734a4f4077' },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -24,7 +25,7 @@ const ContactGroup = (props) => {
       }
     );
     setSelectedChat(data);
-    console.log('Data', data);
+    console.log('Group id Data', data);
   };
 
   // console.log('Selected contacts', selectedContacts);
