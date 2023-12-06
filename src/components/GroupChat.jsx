@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import Cam from "../assets/camera.png";
+import Cam from '../assets/camera.png';
 import { ChatState } from '../context/ChatProvider';
 import axios from 'axios';
 import BaseURL from '../BaseURL';
-
+import GroupProfile from './GroupProfile';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const token = localStorage.getItem('token');
 
 const GroupChat = ({ selectedUser }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [groupName, setGroupName] = useState('');
-  const {selectedContacts} = ChatState();
+  const { selectedContacts, setSelectedContacts } = ChatState();
+  const navigate = useNavigate();
 
   useEffect(() => {
-   
     setSelectedFile(null);
     setGroupName('');
   }, [selectedUser]);
@@ -32,26 +34,91 @@ const GroupChat = ({ selectedUser }) => {
     }
   };
 
-  const handleCreateGroup = async() => {
-    await axios.post(`${BaseURL}/createGroup`,{
-        name: groupName,
-        users: JSON.stringify(selectedContacts)
-    },{
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-    
+  let ids = selectedContacts.map((item) => item._id);
 
-    setSelectedFile(null);
-    setGroupName('');
+  // const handleCreateGroup = async () => {
+  //   const newGroup = {
+  //     groupName: groupName,
+  //     // Add other properties you need for a group object
+  //   };
+
+  //   // Update the selectedContacts array with the new group
+  //   setSelectedContacts([...selectedContacts, newGroup]);
+
+  //   try {
+  //     // Perform the API call to create the group
+  //     await axios.post(
+  //       `${BaseURL}/createGroup`,
+  //       {
+  //         name: groupName,
+  //         users: JSON.stringify(ids),
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           'Content-Type': 'application/json',
+  //         },
+  //       }
+  //     );
+
+  //     setSelectedFile(null);
+  //     setGroupName('');
+  //   } catch (error) {
+  //     // Log and handle the error
+  //     console.error('Error creating group:', error);
+  //   }
+  // };
+
+  // console.log(selectedContacts);
+
+  const handleCreateGroup = async () => {
+    const newGroup = {
+      groupName: groupName,
+      // Add other properties you need for a group object
+    };
+
+    // Update the selectedContacts array with the new group
+    setSelectedContacts([...selectedContacts, newGroup]);
+    navigate('/home');
+    toast.success('Group created successfully');
   };
+
+  useEffect(() => {
+    const createGroup = async () => {
+      try {
+        // Perform the API call to create the group
+        await axios.post(
+          `${BaseURL}/createGroup`,
+          {
+            name: groupName,
+            users: JSON.stringify(ids),
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        setSelectedFile(null);
+        setGroupName('');
+      } catch (error) {
+        // Log and handle the error
+        console.error('Error creating group:', error);
+      }
+    };
+
+    if (selectedContacts.length > 0) {
+      createGroup();
+    }
+  }, [selectedContacts]); // Watch for changes in selectedContacts
 
   console.log(selectedContacts);
 
   return (
     <div>
-      <div className="max-w-md flex flex-col justify-center items-center">
+      <div className=" flex flex-col justify-center">
         <div className="flex justify-start relative ">
           <label
             htmlFor="profilePicture"
@@ -77,7 +144,7 @@ const GroupChat = ({ selectedUser }) => {
             <input
               type="text"
               id="groupName"
-              placeholder='Group name'
+              placeholder="Group name"
               value={groupName}
               onChange={(e) => setGroupName(e.target.value)}
               className="border border-gray-300 p-2 rounded-md w-64"
@@ -85,19 +152,22 @@ const GroupChat = ({ selectedUser }) => {
           </div>
         </div>
         <div>
-            {selectedContacts && (
-              <div>
-                Selected User: {selectedContacts.map((s) => (<li>{s}</li>))}
-              </div>
-            )}
+          {selectedContacts && (
+            <div>
+              {selectedContacts.map((s) => (
+                <GroupProfile contact={s} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
+
       <button
         type="button"
         onClick={handleCreateGroup}
-        className="w-[200px] ml-[15%] mt-[40%] bg-gradient-to-r from-gray-900 to-gray-400/90 text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
+        className="w-[200px] ml-[40%] mt-[40%] bg-gradient-to-r from-gray-900 to-gray-400/90 text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
       >
-        Create
+        Create Group
       </button>
     </div>
   );

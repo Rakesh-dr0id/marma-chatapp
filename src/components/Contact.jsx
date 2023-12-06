@@ -6,7 +6,7 @@ import BaseURL from '../BaseURL';
 const token = localStorage.getItem('token');
 
 const Contact = (props) => {
-  let { name, email, image, _id } = props.data; //headerData
+  let { name, email, image, _id, chatName } = props.data; //headerData
   const { setSelectedChat } = ChatState();
 
   // useEffect(() => {}, []);
@@ -38,7 +38,7 @@ const Contact = (props) => {
           />
         </div>
         <div className="w-full">
-          <div className="text-lg font-semibold">{name}</div>
+          <div className="text-lg font-semibold">{name || chatName}</div>
           <span className="text-gray-500">{email}</span>
         </div>
       </div>

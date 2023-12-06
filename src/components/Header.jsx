@@ -31,7 +31,14 @@ const Header = ({ onHeaderDataChange }) => {
             },
           }
         );
-        onHeaderDataChange(response.data.users);
+        onHeaderDataChange([
+          ...response.data.users,
+          ...response.data.groupChats,
+        ]);
+        console.log('all', [
+          ...response.data.users,
+          ...response.data.groupChats,
+        ]);
       } catch (error) {
         console.error('Error fetching data:', error);
       }

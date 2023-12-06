@@ -7,6 +7,8 @@ import axios from 'axios';
 import { ChatState } from '../context/ChatProvider';
 import BaseURL from '../BaseURL';
 
+const token = localStorage.getItem('token');
+
 const Settings = () => {
   const [showPasswordFields, setShowPasswordFields] = useState(false);
   const [newPassword, setNewPassword] = useState('');
@@ -16,31 +18,98 @@ const Settings = () => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const { user } = ChatState();
-  const token = localStorage.getItem('token');
   const navigate = useNavigate();
+
+  const testSub = () => {
+    console.log('submitting');
+  };
+
+  // const submitData = async (data) => {
+  //   console.log('updatedata', data);
+
+  //   const formData = new FormData();
+
+  //   formData.append('name', data.name);
+  //   formData.append('password', data.newPassword);
+  //   formData.append('employeeId', data.employeeId);
+  //   formData.append('role', data.role);
+
+  //   if (selectedFile) {
+  //     formData.append('image', selectedFile);
+  //   }
+  //   console.log('Formdata', formData);
+
+  //   try {
+  //     const response = await axios.put(
+  //       `${BaseURL}/editUser/${user.id}`,
+  //       formData,
+  //       {
+  //         headers: {
+  //           'Content-Type': 'multipart/form-data',
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     console.log('Form update', response);
+  //     toast.success('Updated Successfully');
+  //     navigate('/');
+  //   } catch (error) {
+  //     toast.error(
+  //       `Failed to update user. Server responded with status ${error}`
+  //     );
+  //   }
+  // };
+
+  const changeHandler = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      // Read the selected file and set it to the state
+      // const reader = new FileReader();
+      // reader.onloadend = () => {
+      //   setSelectedFile(reader.result);
+      // };
+      // reader.readAsDataURL(file);
+      setSelectedFile(file);
+    } else {
+      setSelectedFile(null);
+    }
+  };
 
   const submitData = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
 
-    const userData = {
-      employeeId,
-      role,
-      password: newPassword,
-      name,
-    };
+    formData.append('employeeId', employeeId);
+    formData.append('role', role);
+    formData.append('password', newPassword);
+    formData.append('name', name);
+
+    if (selectedFile) {
+      formData.append('image', selectedFile);
+    }
+
+    // const userData = {
+    //   employeeId,
+    //   role,
+    //   password: newPassword,
+    //   name,
+    //   image: formData,
+    // };
+    // console.log('formData', userData);
 
     try {
       const response = await axios.put(
         `${BaseURL}/editUser/${user.id}`,
-        userData,
+        formData,
         {
           headers: {
+            'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`,
           },
         }
       );
-
-      console.log(response.data);
 
       if (response.status === 200) {
         toast.success('Updated Successfully');
@@ -57,20 +126,6 @@ const Settings = () => {
     }
   };
 
-  const changeHandler = (e) => {
-    const file = e.target.files[0];
-
-    if (file) {
-      // Read the selected file and set it to the state
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedFile(reader.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setSelectedFile(null);
-    }
-  };
   const handleDropdownToggle = () => {
     setShowPasswordFields(!showPasswordFields);
   };
@@ -107,7 +162,7 @@ const Settings = () => {
     setRole(user?.role || '');
     setName(user?.name || ''); // Set name state
     setNewPassword('');
-    setSelectedFile(user?.image || null);
+    setSelectedFile(user?.image);
   }, [user]);
 
   return (
@@ -130,6 +185,7 @@ const Settings = () => {
                 {/* Add your icon or text for "Choose File" */}
                 {selectedFile && (
                   <img
+                    // src={URL.createObjectURL(selectedFile)}
                     src={selectedFile}
                     alt="Selected Profile"
                     className="object-cover h-full w-full rounded-full"
@@ -247,7 +303,10 @@ const Settings = () => {
                   </div>
                   <div>
                     <button
-                      type="submit"
+                      // type="submit"
+                      onClick={() => {
+                        testSub();
+                      }}
                       className="w-[200px] ml-[25%] mt-40 bg-gradient-to-r from-gray-900 to-gray-400/90 text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
                     >
                       Save Changes

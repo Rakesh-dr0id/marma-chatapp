@@ -9,11 +9,11 @@ const token = localStorage.getItem('token');
 
 const ChatProvider = ({ children }) => {
   const [selectedChat, setSelectedChat] = useState();
+  const [selectedGroup, setSelectedGroup] = useState();
   const [user, setUser] = useState('');
   const [notification, setNotification] = useState([]);
   const [chats, setChats] = useState();
   const [selectedContacts, setSelectedContacts] = useState([]);
-
 
   useEffect(() => {
     const currentUser = async () => {
@@ -55,7 +55,7 @@ const ChatProvider = ({ children }) => {
         chats,
         setChats,
         selectedContacts,
-        setSelectedContacts
+        setSelectedContacts,
       }}
     >
       {children}
