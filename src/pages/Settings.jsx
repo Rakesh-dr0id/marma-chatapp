@@ -176,13 +176,13 @@ const Settings = () => {
           <h1>Settings</h1>
         </div>
         <div style={containerStyle}>
-          <div className="max-w-md text-center  ">
-            <div className="flex justify-end relative">
-              <label
+          <div className="max-w-md text-center   ">
+            <div className="flex flex-row justify-end  relative">
+              <label 
                 htmlFor="profilePicture"
-                className="cursor-pointer rounded-full border-4 border-gray-500 p-2 h-40 w-40"
+                className="cursor-pointer rounded-full md:rounded-full border-4 border-gray-500 p-2 h-32 w-32 md:h-40 md:w-40"
               >
-                {/* Add your icon or text for "Choose File" */}
+               
                 {selectedFile && (
                   <img
                     // src={URL.createObjectURL(selectedFile)}
@@ -201,7 +201,7 @@ const Settings = () => {
                 accept="image/*"
               />
             </div>
-            <div className="mb-[100%] flex flex-col">
+            <div className="mb-[100%]   flex flex-col">
               <h1 className="text-black font-sans font-extrabold mt-5  ">
                 {user?.name}
               </h1>
@@ -210,13 +210,13 @@ const Settings = () => {
               </h1>
             </div>
           </div>
-          <div className="flex h-screen ml-40">
-            <div className="lg:flex items-center justify-center flex-1 bg-white text-black">
-              <div className="border-l border-solid ml-20 border-gray-300/90  h-full mx-4"></div>
+          <div className="lg:flex lg:h-screen   lg:ml-40">
+            <div className="lg:flex  items-center justify-center flex-1 bg-white text-black">
+              <div className=" border-l border-solid ml-20 border-gray-300/90  h-full mx-4"></div>
             </div>
-            <div className="w-full   flex items-center justify-center">
+            <div className="w-full    flex items-center justify-center">
               <div className="max-w-md w-full p-6">
-                <form className="space-y-4 ml-10" onSubmit={submitData}>
+                <form className="space-y-4 lg:ml-10" onSubmit={submitData}>
                   <div>
                     <label
                       htmlFor="employeeId"
@@ -230,7 +230,7 @@ const Settings = () => {
                       name="employeeId"
                       value={employeeId}
                       onChange={(e) => setEmployeeId(e.target.value)}
-                      className="mt-1 p-2 w-96 bg-gray-200 text-black rounded-xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                      className="mt-1 p-2 md:w-96 bg-gray-200 text-black rounded-xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                     />
                   </div>
                   <div>
@@ -246,7 +246,7 @@ const Settings = () => {
                       name="role"
                       value={role}
                       onChange={(e) => setRole(e.target.value)}
-                      className="mt-1 p-2 w-96 bg-gray-200 text-black rounded-xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                      className="mt-1 p-2 md:w-96 bg-gray-200 text-black rounded-xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                     />
                   </div>
                   <div>
@@ -262,7 +262,7 @@ const Settings = () => {
                       name="name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="mt-1 p-2 w-96 bg-gray-200 text-black rounded-xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                      className="mt-1 p-2 md:w-96 bg-gray-200 text-black rounded-xl focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                     />
                   </div>
                   <div className="mt-4">
@@ -270,11 +270,11 @@ const Settings = () => {
                       <div>
                         <span
                           onClick={handleDropdownToggle}
-                          className="cursor-pointer w-96 mt-10 bg-gray-200 text-smd border border-blue-500 text-black font-bold py-2 px-4 rounded-xl inline-flex items-center"
+                          className="cursor-pointer  md:w-96 mt-10 bg-gray-200  md:text-sm border border-blue-500 text-black font-bold py-2 px-4 rounded-xl inline-flex items-center"
                         >
                           Change Password
                           <svg
-                            className="ml-[54%] h-4 w-4"
+                            className="md:ml-[54%] h-4 w-4"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 20 20"
                             fill="currentColor"
@@ -287,7 +287,7 @@ const Settings = () => {
                         </span>
                       </div>
                       {showPasswordFields && (
-                        <div className="origin-top-left absolute left-0 mt-2 w-96 rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <div className="origin-top-left absolute left-0 mt-2 md:w-96 rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none">
                           <div className="py-1">
                             <input
                               type="password"
@@ -307,7 +307,7 @@ const Settings = () => {
                       onClick={() => {
                         testSub();
                       }}
-                      className="w-[200px] ml-[25%] mt-40 bg-gradient-to-r from-gray-900 to-gray-400/90 text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
+                      className="w-[200px] mt-16 md:ml-[25%] md:mt-40 bg-gradient-to-r from-gray-900 to-gray-400/90 text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
                     >
                       Save Changes
                     </button>
