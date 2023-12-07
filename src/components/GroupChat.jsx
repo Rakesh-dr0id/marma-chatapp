@@ -24,11 +24,7 @@ const GroupChat = ({ selectedUser }) => {
     const file = e.target.files[0];
 
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedFile(reader.result);
-      };
-      reader.readAsDataURL(file);
+      setSelectedFile(file);
     } else {
       setSelectedFile(null);
     }
@@ -71,50 +67,69 @@ const GroupChat = ({ selectedUser }) => {
 
   // console.log(selectedContacts);
 
-  const handleCreateGroup = async () => {
-    const newGroup = {
-      groupName: groupName,
-      // Add other properties you need for a group object
-    };
+  //!RED
+  // const handleCreateGroup = async () => {
+  //   const newGroup = {
+  //     groupName: groupName,
+  //     // Add other properties you need for a group object
+  //   };
 
-    // Update the selectedContacts array with the new group
-    setSelectedContacts([...selectedContacts, newGroup]);
-    navigate('/home');
-    toast.success('Group created successfully');
-  };
+  //   // Update the selectedContacts array with the new group
+  //   setSelectedContacts([...selectedContacts, newGroup]);
+  //   navigate('/home');
+  //   toast.success('Group created successfully');
+  // };
 
-  useEffect(() => {
-    const createGroup = async () => {
-      try {
-        // Perform the API call to create the group
-        await axios.post(
-          `${BaseURL}/createGroup`,
-          {
-            name: groupName,
-            users: JSON.stringify(ids),
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
+  //!RRR
+  // const createGroup = async () => {
+  //   try {
+  //     // Perform the API call to create the group
+  //     await axios.post(
+  //       `${BaseURL}/createGroup`,
+  //       {
+  //         name: groupName,
+  //         image: selectedFile,
+  //         users: JSON.stringify(ids),
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           'Content-Type': 'application/json',
+  //         },
+  //       }
+  //     );
+  //   } catch (error) {
+  //     // Log and handle the error
+  //     console.error('Error creating group:', error);
+  //   }
+  // };
 
-        setSelectedFile(null);
-        setGroupName('');
-      } catch (error) {
-        // Log and handle the error
-        console.error('Error creating group:', error);
-      }
-    };
+  const submitData = async (data) => {
+    console.log('=========================', data);
+    const formData = new FormData();
 
-    if (selectedContacts.length > 0) {
-      createGroup();
+    formData.append('name', groupName);
+    formData.append('users', JSON.stringify(ids));
+
+    if (selectedFile) {
+      formData.append('image', selectedFile);
     }
-  }, [selectedContacts]); // Watch for changes in selectedContacts
 
-  console.log(selectedContacts);
+    try {
+      const response = await axios.post(`${BaseURL}/createGroup`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log(response.data);
+      toast.success('Group created Successfully');
+      navigate('/');
+    } catch (error) {
+      toast.error('Error creating group:', error);
+    }
+  };
 
   return (
     <div>
@@ -126,7 +141,7 @@ const GroupChat = ({ selectedUser }) => {
           >
             {selectedFile && (
               <img
-                src={selectedFile}
+                src={URL.createObjectURL(selectedFile)}
                 alt="Selected Profile"
                 className="object-cover h-full w-full rounded-full"
               />
@@ -164,7 +179,7 @@ const GroupChat = ({ selectedUser }) => {
 
       <button
         type="button"
-        onClick={handleCreateGroup}
+        onClick={submitData}
         className="w-[200px] ml-[40%] mt-[40%] bg-gradient-to-r from-gray-900 to-gray-400/90 text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
       >
         Create Group

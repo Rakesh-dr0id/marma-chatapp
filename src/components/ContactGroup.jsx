@@ -11,21 +11,21 @@ const ContactGroup = (props) => {
     ChatState();
 
   // useEffect(() => {}, []);
-  const handleChatId = async () => {
-    console.log('HI');
-    console.log('Chat ID', _id);
-    const { data } = await axios.post(
-      `${BaseURL}/accessChat`,
+  // const handleChatId = async () => {
+  //   console.log('HI');
+  //   console.log('Chat ID', _id);
+  //   const { data } = await axios.post(
+  //     `${BaseURL}/accessChat`,
 
-      { userId: _id },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    setSelectedChat(data);
-  };
+  //     { userId: _id },
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }
+  //   );
+  //   setSelectedChat(data);
+  // };
 
   // console.log('Selected contacts', selectedContacts);
 
@@ -33,7 +33,7 @@ const ContactGroup = (props) => {
     <div onClick={() => props.handleContactClick(props.data)}>
       <div
         className={`flex flex-row py-4 px-2 justify-center items-center border-b-2 hover:bg-blue-400 hover:cursor-pointer }`}
-        onClick={handleChatId}
+        // onClick={handleChatId}
         // style={{ backgroundColor: selectedContacts === _id ? 'transparent' : 'green' }}
       >
         <div className="w-1/4">

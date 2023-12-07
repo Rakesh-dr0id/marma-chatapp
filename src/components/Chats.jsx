@@ -72,11 +72,11 @@ const Chats = ({ currentUser, selectedUser }) => {
           },
         }
       );
-      console.log('API response getMsg', data);
+      // console.log('API response getMsg', data);
 
       setMessages(data);
       socketConnected.emit('join chat', selectedChat._id);
-      console.log('Join chat selectedChat Id', selectedChat._id);
+      // console.log('Join chat selectedChat Id', selectedChat);
     } catch (error) {
       toast.error(error);
     }

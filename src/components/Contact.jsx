@@ -6,31 +6,42 @@ import BaseURL from '../BaseURL';
 const token = localStorage.getItem('token');
 
 const Contact = (props) => {
-  // console.log('Contact all:', props.data);
   let { name, email, image, _id, chatName } = props.data; //headerData All data in single array => users and groups
   const { setSelectedChat } = ChatState();
-  const [isGroup, setIsGroup] = useState(false)
 
-  // useEffect(() => {}, []);
   const handleChatId = async () => {
-    console.log('chatID: ', _id);
+    console.log('Group or not', props.data);
+    if (props.data.isGroupChat) {
+      console.log('Request Payload:', { groupId: _id });
+      const { data } = await axios.post(
+        `${BaseURL}/accessGroupChat`,
 
-    const { data } = await axios.post(
-      `${BaseURL}/accessChat`,
-
-      { userId: _id },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    setSelectedChat(data);
+        { groupId: _id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setSelectedChat(data);
+      console.log('Group id Data', data);
+    } else {
+      console.log('chatID: ', _id);
+      const { data } = await axios.post(
+        `${BaseURL}/accessChat`,
+        { userId: _id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setSelectedChat(data);
+    }
   };
 
   //! IMPORTANT
   const handleGroupId = async () => {
-    
     console.log('Request Payload:', { groupId: _id });
     const { data } = await axios.post(
       `${BaseURL}/accessGroupChat`,
@@ -43,21 +54,14 @@ const Contact = (props) => {
       }
     );
     setSelectedChat(data);
-    setIsGroup(data.isGroupChat);
     console.log('Group id Data', data);
   };
 
   return (
     <div>
-      {!isGroup && (<div
+      <div
         className="flex flex-row py-4 px-2 justify-center items-center border-b-2 hover:bg-blue-400 hover:cursor-pointer"
-        onClick={() => {
-          if(isGroup){
-            handleGroupId();
-          }else {
-            handleChatId();
-          }          
-        }}
+        onClick={handleChatId}
       >
         <div className="w-1/4">
           <img
@@ -70,7 +74,7 @@ const Contact = (props) => {
           <div className="text-lg font-semibold">{name || chatName}</div>
           <span className="text-gray-500">{email}</span>
         </div>
-      </div>)}
+      </div>
     </div>
   );
 };
