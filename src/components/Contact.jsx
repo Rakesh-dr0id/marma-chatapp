@@ -1,16 +1,20 @@
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChatState } from '../context/ChatProvider';
 import BaseURL from '../BaseURL';
 
 const token = localStorage.getItem('token');
 
 const Contact = (props) => {
-  let { name, email, image, _id, chatName } = props.data; //headerData
+  // console.log('Contact all:', props.data);
+  let { name, email, image, _id, chatName } = props.data; //headerData All data in single array => users and groups
   const { setSelectedChat } = ChatState();
+  const [isGroup, setIsGroup] = useState(false)
 
   // useEffect(() => {}, []);
   const handleChatId = async () => {
+    console.log('chatID: ', _id);
+
     const { data } = await axios.post(
       `${BaseURL}/accessChat`,
 
@@ -24,11 +28,36 @@ const Contact = (props) => {
     setSelectedChat(data);
   };
 
+  //! IMPORTANT
+  const handleGroupId = async () => {
+    
+    console.log('Request Payload:', { groupId: _id });
+    const { data } = await axios.post(
+      `${BaseURL}/accessGroupChat`,
+
+      { groupId: _id },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    setSelectedChat(data);
+    setIsGroup(data.isGroupChat);
+    console.log('Group id Data', data);
+  };
+
   return (
     <div>
-      <div
+      {!isGroup && (<div
         className="flex flex-row py-4 px-2 justify-center items-center border-b-2 hover:bg-blue-400 hover:cursor-pointer"
-        onClick={handleChatId}
+        onClick={() => {
+          if(isGroup){
+            handleGroupId();
+          }else {
+            handleChatId();
+          }          
+        }}
       >
         <div className="w-1/4">
           <img
@@ -41,7 +70,7 @@ const Contact = (props) => {
           <div className="text-lg font-semibold">{name || chatName}</div>
           <span className="text-gray-500">{email}</span>
         </div>
-      </div>
+      </div>)}
     </div>
   );
 };

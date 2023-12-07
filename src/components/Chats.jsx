@@ -21,6 +21,7 @@ const Chats = ({ currentUser, selectedUser }) => {
   const { selectedChat, setSelectedChat, user, notification, setNotification } =
     ChatState();
   const scrollRef = useRef();
+  const messagesRef = useRef(messages);
 
   useEffect(() => {
     const socket = io(ENDPOINT);
@@ -49,9 +50,12 @@ const Chats = ({ currentUser, selectedUser }) => {
   // }, 5000);
 
   //! Imp
-  // useEffect(() => {
-  //   getMessages();
-  // }, [messages]);
+  useEffect(() => {
+    if (messagesRef.current !== messages) {
+      getMessages();
+      messagesRef.current = messages; // Update the messagesRef with the current messages state
+    }
+  }, [messages]);
 
   // useEffect(() => {
   //   scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -68,11 +72,11 @@ const Chats = ({ currentUser, selectedUser }) => {
           },
         }
       );
-      console.log('API response', data);
+      console.log('API response getMsg', data);
 
       setMessages(data);
       socketConnected.emit('join chat', selectedChat._id);
-      console.log('Join chat', selectedChat._id);
+      console.log('Join chat selectedChat Id', selectedChat._id);
     } catch (error) {
       toast.error(error);
     }
